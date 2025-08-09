@@ -10,17 +10,26 @@ import {
   type Edge,
   type NodeChange,
   type EdgeChange,
-  type Connection
+  type Connection,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { ResistanceNode } from './Resistance';
  
 const initialNodes: Node[] = [
-  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Node 1' } },
-  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Node 2' } },
+  { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Node 1' }, type: 'resistance' },
+  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Node 2' }, type: 'resistance' },
 ];
-const initialEdges: Edge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2', type: 'smoothstep' }];
+const initialEdges: Edge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2', type: 'straight', style: {
+  strokeWidth: 2,
+  stroke: 'black',
+}, }];
  
-export default function App() {
+export default function Circuit() {
+
+  const nodeTypes = {
+    resistance: ResistanceNode,
+  };
+
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
   const [edges, setEdges] = useState<Edge[]>(initialEdges);
  
@@ -33,12 +42,15 @@ export default function App() {
     [],
   );
   const onConnect = useCallback(
-    (params: Connection) => setEdges((edgesSnapshot) => addEdge({ ...params, type: 'smoothstep' }, edgesSnapshot)),
+    (params: Connection) => setEdges((edgesSnapshot) => addEdge({ ...params, type: 'straight', style: {
+      strokeWidth: 2,
+      stroke: 'black',
+    }, }, edgesSnapshot)),
     [],
   );
 
-  const addNode = useCallback(() => {
-    setNodes([...nodes, { id: `n${nodes.length + 1}`, position: { x: 0, y: nodes.length * 100 }, data: { label: `Node ${nodes.length + 1}` } }]);
+  const addResistanceNode = useCallback(() => {
+    setNodes([...nodes, { id: `n${nodes.length + 1}`, position: { x: 0, y: nodes.length * 100 }, data: { label: `Resistance ${nodes.length + 1}` }, type: 'resistance' }]);
   }, [nodes]);
 
   const nodeColor = (node: Node) => {
@@ -53,8 +65,9 @@ export default function App() {
   };
   return (
     <div style={{ width: '100vw', height: '100vh' }}>
-      <button onClick={addNode}>Add Node</button>
+      <button onClick={addResistanceNode}>Add Resistance</button>
       <ReactFlow
+        nodeTypes={nodeTypes}
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
