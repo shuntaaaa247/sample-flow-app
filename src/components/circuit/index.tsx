@@ -14,10 +14,12 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { ResistanceNode } from './Resistance';
+import { DCPowerSupply } from './DCPowerSupply';
  
 const initialNodes: Node[] = [
+  { id: 'n0', position: { x: -150, y: 0 }, data: { label: 'Node 0' }, type: 'dc-power-supply' },
   { id: 'n1', position: { x: 0, y: 0 }, data: { label: 'Node 1' }, type: 'resistance' },
-  { id: 'n2', position: { x: 0, y: 100 }, data: { label: 'Node 2' }, type: 'resistance' },
+  { id: 'n2', position: { x: 150, y: 0 }, data: { label: 'Node 2' }, type: 'resistance' },
 ];
 const initialEdges: Edge[] = [{ id: 'n1-n2', source: 'n1', target: 'n2', type: 'straight', style: {
   strokeWidth: 2,
@@ -28,6 +30,7 @@ export default function Circuit() {
 
   const nodeTypes = {
     resistance: ResistanceNode,
+    'dc-power-supply': DCPowerSupply,
   };
 
   const [nodes, setNodes] = useState<Node[]>(initialNodes);
