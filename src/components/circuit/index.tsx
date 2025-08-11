@@ -11,6 +11,7 @@ import {
   type NodeChange,
   type EdgeChange,
   type Connection,
+  ConnectionMode,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { ResistanceNode } from './Resistance';
@@ -77,6 +78,7 @@ export default function Circuit() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
+        connectionMode={ConnectionMode.Loose}
       >
         <MiniMap nodeColor={nodeColor} nodeStrokeWidth={3} zoomable pannable />
       </ReactFlow>

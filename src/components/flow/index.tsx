@@ -61,6 +61,7 @@ export default function App() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         fitView
+        connectionRadius={0}
       >
         <MiniMap nodeColor={nodeColor} nodeStrokeWidth={3} zoomable pannable />
       </ReactFlow>

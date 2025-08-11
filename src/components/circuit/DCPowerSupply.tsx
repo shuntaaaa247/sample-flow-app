@@ -2,30 +2,49 @@ import { useCallback, useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 
 export function DCPowerSupply() {
-  const [arrangement, setArrangement] = useState("horizontal");
+  const [arrangement, setArrangement] = useState<number>(0);
   const [isBeingHovered, setIsBeingHovered] = useState(false);
   const [isBeingClicked, setIsBeingClicked] = useState(false);
   const [value, setValue] = useState("V");
+
+  const handleRotate = () => {
+    setArrangement(arrangement + 90);
+  };
 
   const onChange = useCallback((evt: React.ChangeEvent<HTMLInputElement>) => {
     setValue(evt.target.value);
   }, []);
 
   return (
-    <div className="flex bg-amber-300 items-center justify-center p-4 w-[50px] h-[50px]" onMouseEnter={() => setIsBeingHovered(true)} onMouseLeave={() => setIsBeingHovered(false)}>
-      <svg width="50" height="50" viewBox="0 0 640 480" xmlns="http://www.w3.org/2000/svg" className="bg-gray-200">
-        <g className="layer" transform="scale(-1, 1) translate(-640, 0)">
-          <title>Layer 1</title>
-          <line fill="none" id="svg_5" stroke="#000000" strokeWidth="10" x1="280" x2="280" y1="90" y2="370"/>
-          <line fill="none" id="svg_8" stroke="#000000" strokeWidth="10" transform="matrix(1 0 0 1 0 0)" x1="320" x2="320" y1="132.5" y2="329.5"/>
-          <line fill="none" id="svg_9" stroke="#000000" strokeWidth="10" x1="0" x2="200" y1="226.5" y2="227.5"/>
-          <line fill="none" id="svg_10" stroke="#000000" strokeWidth="10" x1="320" x2="320" y1="229.5" y2="230.5"/>
-        </g>
-      </svg>
-      <Handle type="target" position={Position.Top} style={{ visibility: isBeingHovered ? 'visible' : 'hidden' }} />
-      <Handle type="source" position={Position.Bottom} style={{ visibility: isBeingHovered ? 'visible' : 'hidden' }} />
-      <Handle type="target" position={Position.Left} style={{ visibility: isBeingHovered ? 'visible' : 'hidden' }} />
-      <Handle type="source" position={Position.Right} style={{ visibility: isBeingHovered ? 'visible' : 'hidden' }} />
+    <div className="relative group">
+      <div 
+        className="flex items-center justify-center w-[60px] h-[60px] relative group" 
+        style={{ transform: `rotate(${arrangement}deg)` }}
+        onMouseEnter={() => setIsBeingHovered(true)} 
+        onMouseLeave={() => setIsBeingHovered(false)}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" width="120" height="120" role="img" aria-labelledby="dcSourceJISAccurate" className="">
+          <line x1="50" y1="-10" x2="50" y2="70" stroke="#000" strokeWidth="4"/>
+          <line x1="70" y1="10" x2="70" y2="50" stroke="#000" strokeWidth="4"/>
+
+          <line x1="0" y1="30" x2="50" y2="30" stroke="#000" strokeWidth="4"/>
+          <line x1="70" y1="30" x2="120" y2="30" stroke="#000" strokeWidth="4"/>
+        </svg>
+
+        {/* <Handle type="source" position={arrangement % 180 === 0 ? Position.Left : Position.Top} style={{ visibility: isBeingHovered ? 'visible' : 'hidden' }} />
+        <Handle type="source" position={arrangement % 180 === 0 ? Position.Right : Position.Bottom} style={{ visibility: isBeingHovered ? 'visible' : 'hidden' }} /> */}
+        {/* <Handle type="source" position={Position.Bottom} style={{ left: 0, visibility: isBeingHovered ? 'visible' : 'hidden' }} /> */}
+        {/* <Handle type="source" position={Position.Bottom} style={{ right: 0, visibility: isBeingHovered ? 'visible' : 'hidden' }} /> */}
+      </div>
+      
+      <button 
+        className="rotate-90 cursor-pointer absolute -top-2 -right-2 bg-white border border-gray-300 rounded-full w-6 h-6 flex items-center justify-center text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 hover:bg-gray-100 z-10" 
+        onClick={handleRotate}
+      >
+        ↻
+      </button>
+      <Handle type="source" position={arrangement % 180 === 0 ? Position.Left : Position.Top} style={{ visibility: isBeingHovered ? 'visible' : 'hidden' }} />
+      <Handle type="source" position={arrangement % 180 === 0 ? Position.Right : Position.Bottom} style={{ visibility: isBeingHovered ? 'visible' : 'hidden' }} />
     </div>
   );
 }
